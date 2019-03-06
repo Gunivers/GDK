@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 public class Main extends Application
 {
 	public final static String TITLE = "GDK Plugins Launcher";
+	
 	public final static ArrayList<GDKPlugin> plugins = new ArrayList<>();
 	
 	private BaseController controller;
@@ -45,4 +46,9 @@ public class Main extends Application
 	}
 	
 	public BaseController getController() { return controller; }
+	
+	public static class PATH
+	{
+		public final static String RESOURCE = "././././././resources/";
+	}
 }
