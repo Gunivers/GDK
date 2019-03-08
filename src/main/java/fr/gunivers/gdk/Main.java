@@ -2,6 +2,7 @@ package fr.gunivers.gdk;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
@@ -9,6 +10,7 @@ import fr.gunivers.gdk.gui.model.GDKPlugin;
 import fr.gunivers.gdk.gui.util.Application;
 import fr.gunivers.gdk.gui.util.Util;
 import fr.gunivers.gdk.gui.view.BaseController;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
@@ -26,7 +28,7 @@ public class Main extends Application
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize()
-	{
+	{	
 		controller = Util.loadFXML(Main.class.getResource("gui/view/Base.fxml"), (BorderPane p) -> { stage.setScene(new Scene(p)); });
 		
 		stage.show();
@@ -43,12 +45,17 @@ public class Main extends Application
 		}
 		
 		controller.refresh();
+		
+		System.out.println(new File(Main.class.getClassLoader().getResource("../default/").getFile() +"img/no_icon.png").exists());
 	}
 	
 	public BaseController getController() { return controller; }
 	
+	public static InputStream getStream(String path) { return Main.class.getClassLoader().getResourceAsStream(path); }
+	
 	public static class PATH
 	{
-		public final static String RESOURCE = "././././././resources/";
+		public final static String RESOURCE = "../default/";
+		public final static String IMAGE = RESOURCE+"img/";
 	}
 }

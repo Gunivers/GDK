@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
+<?import com.jfoenix.controls.JFXMasonryPane?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.input.KeyCodeCombination?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.gunivers.gdk.gui.view.BaseController">
@@ -53,21 +51,19 @@
       </MenuBar>
    </top>
    <center>
-      <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <items>
-            <ListView fx:id="plugins" />
-            <SplitPane dividerPositions="0.8" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL">
-              <items>
-                  <TextArea fx:id="information" prefHeight="200.0" prefWidth="200.0" />
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                     <children>
-                        <Button layoutX="14.0" layoutY="26.0" mnemonicParsing="false" onAction="#buttonRun_click" text="Run" textAlignment="CENTER" />
-                        <Button layoutX="227.0" layoutY="26.0" mnemonicParsing="false" onAction="#buttonUnload_click" text="Unload" textAlignment="CENTER" />
-                     </children>
-                  </AnchorPane>
-              </items>
-            </SplitPane>
-        </items>
-      </SplitPane>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Plugins">
+               <content>
+                  <JFXMasonryPane fx:id="plugins" />
+               </content>
+          </Tab>
+          <Tab text="Resources">
+               <content>
+                  <JFXMasonryPane fx:id="resources" />
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </center>
 </BorderPane>

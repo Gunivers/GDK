@@ -5,61 +5,44 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.jfoenix.controls.JFXMasonryPane;
+
 import fr.gunivers.gdk.Main;
+import fr.gunivers.gdk.gui.components.GDKImageView;
 import fr.gunivers.gdk.gui.model.GDKPlugin;
 import fr.gunivers.gdk.gui.util.Application;
 import fr.gunivers.gdk.gui.util.Controller;
 import fr.gunivers.gdk.gui.util.Util;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 
 public class BaseController extends Controller
 {
-	@FXML ListView<GDKPlugin> plugins;
-	@FXML TextArea information;
+	@FXML private JFXMasonryPane plugins;
+	@FXML private JFXMasonryPane resources;
 
 	@Override
 	public void initialize()
 	{
-		plugins.setCellFactory(data -> new GDKPluginListCell());
-		plugins.getSelectionModel().selectedItemProperty().addListener((obs, old, value) -> setDescription(value));
 	}
 	
 	@Override
 	public void refresh()
 	{
-		ObservableList<GDKPlugin> items = plugins.getItems();
-		items.clear();
+		List<Node> children = plugins.getChildren();
+		children.clear();
 		
-		Main.plugins.forEach(plugin -> items.add(plugin));
+		for (GDKPlugin plugin : Main.plugins)
+			children.add(new GDKImageView<GDKPlugin>(plugin));
 	}
-	
-	public void setDescription(GDKPlugin plugin)
-	{
-		if (plugin == null) return;
-		information.setText("");
-		
-		information.appendText("Plugin: " + plugin.getName() +" ─ "+ plugin.getJarFile().getName() +'\n'
-							+  "Author: " + plugin.getAuthor()	+'\n'
-							+  "Version: "+ plugin.getVersion()	+'\n'
-							+  "Main Class: "+ plugin.getPath()	+'\n'
-							+  "\nDescription: " + plugin.getDescription());
-	}
-	
-
 	
 	@FXML
 	public void menuFile_clickLoadPlugin()
@@ -119,7 +102,8 @@ public class BaseController extends Controller
 		if (alert.getResult() == ButtonType.OK)
 			Main.getStage().close();
 	}
-	
+
+/*	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@FXML
 	public void buttonRun_click()
@@ -140,7 +124,8 @@ public class BaseController extends Controller
 			Util.alert(AlertType.ERROR, "Exception", "An exception occured whilst running "+plugin.getName(), e.getClass().getName(), true);
 		}
 	}
-	
+*/
+/*	
 	@FXML
 	public void buttonUnload_click()
 	{
@@ -160,15 +145,8 @@ public class BaseController extends Controller
 			this.refresh();
 		}
 	}
+*/
 }
 
-class GDKPluginListCell extends ListCell<GDKPlugin>
-{ 	  
-	@Override 
-	protected void updateItem(GDKPlugin item, boolean empty)
-	{
-		super.updateItem(item, empty); 
-		super.setText(item != null  && !empty ? item.getName() : null);
-	} 
-}
+
 

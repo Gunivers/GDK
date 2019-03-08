@@ -3,6 +3,9 @@ package fr.gunivers.gdk.gui.model;
 import java.io.File;
 import java.io.Serializable;
 
+import fr.gunivers.gdk.gui.components.GDKImageView;
+import javafx.scene.image.Image;
+
 public class GDKPlugin implements Serializable
 {
 	private static final long serialVersionUID = 1160705032547915636L;
@@ -14,6 +17,8 @@ public class GDKPlugin implements Serializable
 	
 	protected String path = "";
 	protected File jar = new File("<No Path Provided>");
+	
+	public Image img = GDKImageView.DEFAULT_ICON;
 	
 	public GDKPlugin() {}
 	public GDKPlugin(String name, String author, String version, String description)
