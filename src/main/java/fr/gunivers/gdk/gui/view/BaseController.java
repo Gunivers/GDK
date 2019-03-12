@@ -16,12 +16,13 @@ import fr.gunivers.gdk.gui.model.GDKPlugin;
 import fr.gunivers.gdk.gui.util.Application;
 import fr.gunivers.gdk.gui.util.Controller;
 import fr.gunivers.gdk.gui.util.Util;
-
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
 public class BaseController extends Controller
@@ -101,6 +102,11 @@ public class BaseController extends Controller
 		Alert alert = Util.alert(AlertType.CONFIRMATION, "Are you sure ?", "Confirm Quitting", "", true);
 		if (alert.getResult() == ButtonType.OK)
 			Main.getStage().close();
+	}
+	
+	public void onPluginSelected(GDKPlugin plugin, MouseEvent event)
+	{
+		
 	}
 
 /*	

@@ -55,7 +55,7 @@
         <tabs>
           <Tab text="Plugins">
                <content>
-                  <JFXMasonryPane fx:id="plugins" />
+                  <JFXMasonryPane fx:id="plugins" HSpacing="10.0" VSpacing="10.0" cellHeight="100.0" cellWidth="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
                </content>
           </Tab>
           <Tab text="Resources">

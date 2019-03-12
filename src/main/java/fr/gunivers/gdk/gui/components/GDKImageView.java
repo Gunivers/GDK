@@ -30,20 +30,19 @@ public class GDKImageView <T extends GDKPlugin> extends AnchorPane
 	
 	private final SimpleStringProperty title = new SimpleStringProperty();
 	private final SimpleObjectProperty<Image> icon = new SimpleObjectProperty<>();
-	private final SimpleObjectProperty<T> item = new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<T> item = new SimpleObjectProperty<T>();
 	
 	private Callback<T, Entry<String,Image>> factory = t -> Util.newEntry(t.getName(), DEFAULT_ICON);
 
 	public final static GDKImageView<GDKPlugin> BASE = new GDKImageView<>();
 	
 	{
-		label.textProperty().bind(title); title.set(DEFAULT_TITLE);
-		image.imageProperty().bind(icon); icon.set(DEFAULT_ICON);
-		
 		item.addListener((obs, old, value) -> { Entry<String,Image> back = factory.call(value);
 			title.set(back.getKey() == null || back.getKey().isEmpty() ? DEFAULT_TITLE : back.getKey());
 			icon.set(back.getValue() == null || back.getValue().isError() ? DEFAULT_ICON : back.getValue());
 		});
+		
+		this.setOnMouseClicked(event -> Main.getApp(Main.class).getController().onPluginSelected(this.item.get(), event));
 	}
 	
 	public GDKImageView()
@@ -55,6 +54,9 @@ public class GDKImageView <T extends GDKPlugin> extends AnchorPane
 		loader.setController(this);
 		
 		try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
+
+		label.textProperty().bind(title);
+		image.imageProperty().bind(icon);
 	}
 	public GDKImageView(T item)
 	{

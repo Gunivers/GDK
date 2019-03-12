@@ -2,6 +2,7 @@ package fr.gunivers.gdk.gui.util;
 
 import javafx.stage.Stage;
 
+@SuppressWarnings("unchecked")
 public abstract class Application extends javafx.application.Application
 {
 	protected static Application app;
@@ -18,7 +19,7 @@ public abstract class Application extends javafx.application.Application
 	
 	public abstract void initialize();
 	
-	@SuppressWarnings("unchecked")
 	public static <A extends Application> A getApp() { return (A) app; }
+	public static <A extends Application> A getApp(Class<A> clazz) { return (A) app; }
 	public static Stage getStage() { return stage; }
 }
