@@ -3,8 +3,9 @@ package fr.gunivers.gdk.gui.model;
 import java.io.File;
 import java.io.Serializable;
 
-import fr.gunivers.gdk.gui.components.GDKImageView;
 import javafx.scene.image.Image;
+
+import static fr.gunivers.gdk.gui.components.GDKImageView.DEFAULT_ICON;
 
 public class GDKPlugin implements Serializable
 {
@@ -15,10 +16,10 @@ public class GDKPlugin implements Serializable
 	protected String version = "<Unknown>";
 	protected String description = "<No Description Provided>";
 	
-	protected String path = "";
+	protected String path = "<No Path Provided>";
 	protected File jar = new File("<No Path Provided>");
 	
-	public Image img = GDKImageView.DEFAULT_ICON;
+	protected transient Image img = DEFAULT_ICON;
 	
 	public GDKPlugin() {}
 	public GDKPlugin(String name, String author, String version, String description)

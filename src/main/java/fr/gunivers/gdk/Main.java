@@ -6,30 +6,33 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import fr.gunivers.gdk.gui.controller.BaseController;
 import fr.gunivers.gdk.gui.model.GDKPlugin;
-import fr.gunivers.gdk.gui.util.Application;
 import fr.gunivers.gdk.gui.util.Util;
-import fr.gunivers.gdk.gui.view.BaseController;
-
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
-public class Main extends Application
+public class Main extends javafx.application.Application
 {
 	public final static String TITLE = "GDK Plugins Launcher";
-	
 	public final static ArrayList<GDKPlugin> plugins = new ArrayList<>();
 	
+	private static Main app;
+	private static Stage stage;
 	private BaseController controller;
 	
 	public static void main(String... args) { launch(args); }
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public void initialize()
+	public void start(Stage primaryStage)
 	{	
-		controller = Util.loadFXML(Main.class.getResource("gui/view/Base.fxml"), (BorderPane p) -> { stage.setScene(new Scene(p)); });
+		Main.app = (Main) this;
+		Main.stage = primaryStage;
+		
+		controller = Util.loadFXML(Main.class.getResource(PATH.FXML+"Base.fxml"), (BorderPane p) -> { stage.setScene(new Scene(p)); });
 		
 		stage.show();
 		stage.setTitle(TITLE);
@@ -45,17 +48,18 @@ public class Main extends Application
 		}
 		
 		controller.refresh();
-		
-		System.out.println(new File(Main.class.getClassLoader().getResource("../default/").getFile() +"img/no_icon.png").exists());
 	}
-	
+
+	public static Main getApp() { return app; }
+	public static Stage getStage() { return stage; }
 	public BaseController getController() { return controller; }
-	
+
 	public static InputStream getStream(String path) { return Main.class.getClassLoader().getResourceAsStream(path); }
 	
 	public static class PATH
 	{
-		public final static String RESOURCE = "../default/";
-		public final static String IMAGE = RESOURCE+"img/";
+		public final static String FXML = "/fxml/";
+		public final static String IMAGE = "/img/";
+		public final static String OTHERS = "/others/";
 	}
 }

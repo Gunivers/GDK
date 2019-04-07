@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import fr.gunivers.gdk.Main;
 import fr.gunivers.gdk.gui.model.GDKPlugin;
 
 import javafx.fxml.FXMLLoader;
@@ -45,7 +46,7 @@ public class Util
 			controller = loader.getController();
 			
 			if (controller != null)
-				controller.setMainApplication(Application.getApp());
+				controller.setMainApplication(Main.getApp());
 			else
 				System.out.println("WARNING: No controller found for '"+ path.toString() +'\'');
 		} catch (IOException e) { e.printStackTrace(); }
@@ -68,7 +69,7 @@ public class Util
 			
 			loop: while((line = reader.readLine()) != null)
 			{
-				if (!line.matches(".+=.+")) continue;
+				if (!line.matches(".+=.*")) continue;
 				
 				if (line.equalsIgnoreCase("description="))
 				{
@@ -85,13 +86,13 @@ public class Util
 			}
 			reader.close();
 			
-			System.out.println("\n Plugin " + file.getName() +":\n"
+/*			System.out.println("\n Plugin " + file.getName() +":\n"
 							+  "  - Name: "+ plugin.getName()		+'\n'
 							+  "  - Author: "+ plugin.getAuthor()	+'\n'
 							+  "  - Version: "+ plugin.getVersion()	+'\n'
 							+  "  - Main: "+ plugin.getPath()		+'\n'
 							+  "  - Description: "+ plugin.getDescription());
-			
+*/			
 			if (!plugin.getPath().matches("(\\w+.)*\\w+"))
 				return Util.newEntry(null, "Invalid class path: " + plugin.getPath());
 			

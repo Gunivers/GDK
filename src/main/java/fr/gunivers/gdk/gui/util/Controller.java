@@ -1,12 +1,13 @@
 package fr.gunivers.gdk.gui.util;
 
+import fr.gunivers.gdk.Main;
 import javafx.fxml.FXML;
 
 public abstract class Controller
 {
-	protected Application app;
+	protected Main app;
 	
-	public void setMainApplication(Application app)
+	public void setMainApplication(Main app)
 	{
 		this.app = app;
 		this.refresh();

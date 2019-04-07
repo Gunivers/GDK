@@ -1,28 +1,29 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'eclipse'
+plugins
+{
+    id 'java'
+    id 'application'
+}
 
 group = 'fr.gunivers.gdk'
-version = '1.0'
+version = '0.0'
 
-description = "GDK"
-
-eclipse {
-    project {
-        name = 'GDK'
-    }
-}
+description = "GDK Launcher"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+repositories
+{
+    jcenter()
+    mavenCentral()
 }
 
-repositories {
-	mavenCentral()
+dependencies
+{
+	compile 'com.jfoenix:jfoenix:8.0.8'
+    testImplementation 'junit:junit:4.12'
 }
 
-dependencies {
-    compile 'com.jfoenix:jfoenix:8.0.8'
-}
+mainClassName = 'fr.gunivers.gdk.Main'

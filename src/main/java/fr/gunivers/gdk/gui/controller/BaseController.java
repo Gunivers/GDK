@@ -1,4 +1,4 @@
-package fr.gunivers.gdk.gui.view;
+package fr.gunivers.gdk.gui.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,17 +13,18 @@ import com.jfoenix.controls.JFXMasonryPane;
 import fr.gunivers.gdk.Main;
 import fr.gunivers.gdk.gui.components.GDKImageView;
 import fr.gunivers.gdk.gui.model.GDKPlugin;
-import fr.gunivers.gdk.gui.util.Application;
 import fr.gunivers.gdk.gui.util.Controller;
 import fr.gunivers.gdk.gui.util.Util;
-import javafx.event.Event;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class BaseController extends Controller
 {
@@ -54,7 +55,7 @@ public class BaseController extends Controller
 		browser.setInitialDirectory(new File(System.getProperty("user.home")));
 		browser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JAR", "*.jar"));
 		
-		List<File> files = browser.showOpenMultipleDialog(Application.getStage());
+		List<File> files = browser.showOpenMultipleDialog(Main.getStage());
 		
 		if (files != null)
 		{
@@ -83,12 +84,13 @@ public class BaseController extends Controller
 	{
 		System.out.println("[DEBUG] Menu File::click(save)");
 		
-		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(Main.class.getResource("launcher.save").toURI()))))
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File
+				( Main.class.getResource(Main.PATH.OTHERS + "launcher.save").toURI() ))))
 		{
 			oos.writeObject(Main.plugins);
 			
 			StringBuilder sb = new StringBuilder(); Main.plugins.forEach(p -> sb.append(p.getName() +'\n'));
-			Util.alert(AlertType.INFORMATION, "Success", "Successfully savec", sb.toString(), false);
+			Util.alert(AlertType.INFORMATION, "Success", "Successfully saved", sb.toString(), false);
 		} catch (IOException | URISyntaxException e)
 		{
 			e.printStackTrace();
@@ -106,53 +108,17 @@ public class BaseController extends Controller
 	
 	public void onPluginSelected(GDKPlugin plugin, MouseEvent event)
 	{
+		final Stage stage = new Stage();
 		
+		PluginViewController controller = Util.loadFXML(Main.class.getResource(Main.PATH.FXML+"PluginView.fxml"), (p) ->
+			stage.setScene(new Scene(p)) );
+		
+		if (controller != null)
+			controller.setPlugin(plugin);
+		
+		stage.sizeToScene();
+		stage.setResizable(false);
+		stage.showAndWait();
 	}
-
-/*	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@FXML
-	public void buttonRun_click()
-	{
-		System.out.println("[DEBUG] Button Run::click");
-		
-		GDKPlugin plugin = plugins.getSelectionModel().getSelectedItem();
-		if (plugin == null) return;
-		
-		try
-		{
-			URLClassLoader loader = new URLClassLoader(new URL[] {plugin.getJarFile().toURI().toURL()}, Main.class.getClassLoader());
-			Class main = Class.forName(plugin.getPath(), true, loader);
-			main.getDeclaredMethod("main", String[].class).invoke(null, new Object[] {new String[0]});
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			Util.alert(AlertType.ERROR, "Exception", "An exception occured whilst running "+plugin.getName(), e.getClass().getName(), true);
-		}
-	}
-*/
-/*	
-	@FXML
-	public void buttonUnload_click()
-	{
-		System.out.println("[DEBUG] Button Unload::click");
-		
-		List<GDKPlugin> plugin = plugins.getSelectionModel().getSelectedItems();
-		if (plugin == null || plugin.isEmpty()) return;
-		
-		StringBuilder sb = new StringBuilder();
-		plugin.forEach(p -> sb.append(p.getName() +'\n'));
-		
-		Alert alert = Util.alert(AlertType.CONFIRMATION, "Are you sure ?", "Do you truly want to unload thess plugins ?", sb.toString(), true);
-		
-		if (alert.getResult() == ButtonType.OK)
-		{
-			Main.plugins.removeAll(plugin);
-			this.refresh();
-		}
-	}
-*/
 }
-
-
 

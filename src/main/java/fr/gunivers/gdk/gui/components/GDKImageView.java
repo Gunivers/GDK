@@ -1,6 +1,7 @@
 package fr.gunivers.gdk.gui.components;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import fr.gunivers.gdk.Main;
@@ -23,55 +24,58 @@ import javafx.util.Callback;
 public class GDKImageView <T extends GDKPlugin> extends AnchorPane
 {
 	public final static String DEFAULT_TITLE = "<Title>";
-	public final static Image DEFAULT_ICON = new Image(Main.getStream(PATH.IMAGE+"no_icon.png"));
+	public final static Image DEFAULT_ICON = new Image(PATH.IMAGE+"no_icon.png");
 
+	public final static HashMap<GDKPlugin, GDKImageView<? extends GDKPlugin>> instances = new HashMap<>();
+	
 	@FXML private Label label;
 	@FXML private ImageView image;
 	
 	private final SimpleStringProperty title = new SimpleStringProperty();
 	private final SimpleObjectProperty<Image> icon = new SimpleObjectProperty<>();
-	private final SimpleObjectProperty<T> item = new SimpleObjectProperty<T>();
+	private final SimpleObjectProperty<T> plugin = new SimpleObjectProperty<T>();
 	
 	private Callback<T, Entry<String,Image>> factory = t -> Util.newEntry(t.getName(), DEFAULT_ICON);
-
-	public final static GDKImageView<GDKPlugin> BASE = new GDKImageView<>();
 	
 	{
-		item.addListener((obs, old, value) -> { Entry<String,Image> back = factory.call(value);
+		plugin.addListener((obs, old, value) -> { Entry<String,Image> back = factory.call(value);
 			title.set(back.getKey() == null || back.getKey().isEmpty() ? DEFAULT_TITLE : back.getKey());
 			icon.set(back.getValue() == null || back.getValue().isError() ? DEFAULT_ICON : back.getValue());
+			
+			instances.remove(old);
+			instances.put(value, this);
 		});
 		
-		this.setOnMouseClicked(event -> Main.getApp(Main.class).getController().onPluginSelected(this.item.get(), event));
+		this.setOnMouseClicked(event -> Main.getApp().getController().onPluginSelected(this.plugin.get(), event));
+		
+		instances.put(this.plugin.get(), this);
 	}
 	
 	public GDKImageView()
 	{
-		System.out.println("Icon: "+ (DEFAULT_ICON.isError()));
-	
-		FXMLLoader loader = new FXMLLoader(GDKImageView.class.getResource("GDKImageView.fxml"));
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource(PATH.FXML+"GDKImageView.fxml"));
 		loader.setRoot(this);
 		loader.setController(this);
 		
-		try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
+		try { loader.load(); } catch (IOException e) { e.printStackTrace(); }
 
 		label.textProperty().bind(title);
 		image.imageProperty().bind(icon);
 	}
-	public GDKImageView(T item)
+	public GDKImageView(T plugin)
 	{
 		this();
-		this.item.set(item);
+		this.plugin.set(plugin);
 	}
 	public GDKImageView(GDKImageView<T> base)
 	{
-		this(base.item.get());
+		this(base.plugin.get());
 		this.factory = base.factory;
 	}
-	public GDKImageView(GDKImageView<T> base, T item)
+	public GDKImageView(GDKImageView<T> base, T plugin)
 	{
 		this(base);
-		this.item.set(item);
+		this.plugin.set(plugin);
 	}
 	
 	public void setViewFactory(Callback<T, Entry<String,Image>> factory) { this.factory = factory; }
@@ -79,13 +83,13 @@ public class GDKImageView <T extends GDKPlugin> extends AnchorPane
 	
 	public StringProperty titleProperty() { return title; }
 	public ObjectProperty<Image> iconProperty() { return icon; }
-	public ObjectProperty<T> itemProperty() { return item; }
+	public ObjectProperty<T> pluginProperty() { return plugin; }
 	
 	public String getTitle() { return title.get(); }
 	public Image getIcon() { return icon.get(); }
-	public T getItem() { return item.get(); }
+	public T getPlugin() { return plugin.get(); }
 	
 	public void setTitle(String title) { this.title.set(title); }
 	public void setIcon(Image icon) { this.icon.set(icon); }
-	public void setItem(T item) { this.item.set(item); }
+	public void setPlugin(T plugin) { this.plugin.set(plugin); }
 }
