@@ -65,7 +65,27 @@ public class Main extends javafx.application.Application
 		
 		controller.refresh();
 		
-		new RuntimeException(new IOException("TEST SCROLL BAR GDK DEBUG")).printStackTrace();
+		System.out.println("> Output tests:");
+		System.out.println(" -- System output");
+		System.out.println("System:out");
+		System.err.println("System:err");
+		
+		DEBUG.logInfo(" -- Debug output");
+		DEBUG.logInfo("Debug:info");
+		DEBUG.logWarning("Debug:warn");
+		DEBUG.logError("Debug:err");
+		
+		DEBUG.logInfo(" -- Debug log output");
+		DEBUG.log("Debug:log [alreadyFormated=false]", false);
+		DEBUG.log("Debug:log [alreadyFormated=true]", true);
+		DEBUG.log(DebugController.INFO + "Debug:log [alreadyFormated=false]", false);
+		DEBUG.log(DebugController.INFO + "Debug:log [alreadyFormated=true]", true);
+		DEBUG.log(DebugController.WARN + "Debug:log [alreadyFormated=false]", false);
+		DEBUG.log(DebugController.WARN + "Debug:log [alreadyFormated=true]", true);
+		DEBUG.log(DebugController.ERR + "Debug:log [alreadyFormated=false]", false);
+		DEBUG.log(DebugController.ERR + "Debug:log [alreadyFormated=true]", true);
+		DEBUG.log(DebugController.OTHER + "Debug:log [alreadyFormated=false]", false);
+		DEBUG.log(DebugController.OTHER + "Debug:log [alreadyFormated=true]", true);
 	}
 
 	public static Main getApp() { return app; }

@@ -138,10 +138,15 @@ public class DebugController extends Controller
 		this.text.getChildren().clear();
 		int index = (int) scroll.getValue();
 		
-		if (index < lines.size()) this.text.getChildren().addAll(lines.subList(index, lines.size()));
-		else this.text.getChildren().addAll(lines.subList(lines.size() -1, lines.size()));
+		if (index < lines.size())
+			this.text.getChildren().addAll(lines.subList(index, lines.size()));
+		else
+		{
+			this.text.getChildren().addAll(lines.subList(lines.size() -1, lines.size()));
+			scroll.setValue(lines.size());
+		}
 	}
-	
+
 	@Deprecated
 	public void scrollAction(int delta)
 	{
