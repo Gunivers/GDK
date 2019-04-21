@@ -20,7 +20,16 @@ public class GDKPlugin implements Serializable
 	protected String path =			"<No Path Provided>";
 	protected File jar = new File(path);
 	
+	protected String header = "<No Header>";
+	
 	protected transient Image icon = DEFAULT_ICON;
+	
+	private String getHeader(String path)
+	{
+		String[] split = path.split(".");
+		if (split.length >= 3) return split[0] +'.'+ split[1]  +'.'+ split[2];
+		return "<No Header>";
+	}
 	
 	public String getName() { return name; }
 	public String getAuthor() { return author; }
@@ -31,13 +40,15 @@ public class GDKPlugin implements Serializable
 	public File getJarFile() { return jar; }
 	public Image getIcon() { return icon; }
 	
+	public String getPathHeader() { return header; }
+	
 	public void setName(String name) { this.name = name; }
 	public void setAuthor(String author) { this.author = author; }
 	public void setLink(String link) { this.link = link; }
 	public void setVersion(String version) { this.version = version; }
 	public void setDescription(String description) { this.description = description; }
 	
-	public void setPath(String path) { this.path = path; }
+	public void setPath(String path) { this.path = path; this.header = this.getHeader(path); }
 	public void setJarFile(File jar) { this.jar = jar; }
 	public void setIcon(Image icon) { this.icon = icon; }
 }

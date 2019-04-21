@@ -19,9 +19,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import net.gunivers.gdk.Main;
 import net.gunivers.gdk.Util;
 import net.gunivers.gdk.Util.PATH;
 import net.gunivers.gdk.gui.Controller;
+import net.gunivers.gdk.gui.model.GDKPlugin;
 
 //fx:controller="net.gunivers.gdk.gui.controller.DebugController"
 
@@ -92,24 +94,29 @@ public class DebugController extends Controller
 		Text text = new Text(this.getDate());
 		String type = " "; Color color = Color.WHITE;
 		
-		if (builder.charAt(0) == INFO)
+		switch (builder.charAt(0))
 		{
-			type += "[INFO]\t";
-			color = Color.AQUA;
-		}
-		else if (builder.charAt(0) == WARN)
-		{
-			type += "[WARN]\t";
-			color = Color.YELLOW;
-		}
-		else if (builder.charAt(0) == ERR)
-		{
-			type += "[ERROR]\t";
-			color = Color.RED;
+			case INFO:
+				type += "[INFO]\t";
+				color = Color.AQUA;
+				break;
+			case WARN:
+				type += "[WARN]\t";
+				color = Color.YELLOW;
+				break;
+			case ERR:
+				type += "[ERROR]\t";
+				color = Color.RED;
+				break;
 		}
 		
 		text.setText(getDate() + type + builder.substring(1));
 		text.setFill(color); text.setFont(Font.font("System"));
+		
+		for (GDKPlugin plugin : Main.plugins) if (builder.toString().contains(plugin.getPathHeader()))
+			text.setFill(Color.PURPLE);
+		
+		if (builder.toString().contains("net.gunivers.gdk")) text.setFill(Color.PURPLE);
 		
 		this.text.getChildren().add(text);
 		this.lines.add(text);
