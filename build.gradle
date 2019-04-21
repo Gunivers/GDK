@@ -1,18 +1,17 @@
-plugins
-{
-    id 'java'
-    id 'application'
-}
-
-group = 'fr.gunivers.gdk'
-version = '0.0'
+group 'Minecraft GDK'
+version '0.0'
 
 description = "GDK Launcher"
+
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'java'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+compileJava.options.encoding = 'UTF-8'
 
 repositories
 {
@@ -26,4 +25,21 @@ dependencies
     testImplementation 'junit:junit:4.12'
 }
 
-mainClassName = 'fr.gunivers.gdk.Main'
+configurations {
+	extraLibs
+}
+
+jar
+{
+    destinationDir = file("$rootDir/builds/")
+    archiveName = "GDK.jar"
+
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes(
+                'Main-Class': 'net.gunivers.gdk.Main'
+        )
+    }
+}

@@ -1,4 +1,4 @@
-package fr.gunivers.gdk.gui.controller;
+package net.gunivers.gdk.gui.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,11 +10,11 @@ import java.util.Map.Entry;
 
 import com.jfoenix.controls.JFXMasonryPane;
 
-import fr.gunivers.gdk.Main;
-import fr.gunivers.gdk.gui.components.GDKImageView;
-import fr.gunivers.gdk.gui.model.GDKPlugin;
-import fr.gunivers.gdk.gui.util.Controller;
-import fr.gunivers.gdk.gui.util.Util;
+import net.gunivers.gdk.gui.Controller;
+import net.gunivers.gdk.gui.components.GDKImageView;
+import net.gunivers.gdk.gui.model.GDKPlugin;
+import net.gunivers.gdk.Util;
+import static net.gunivers.gdk.Util.PATH;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -25,6 +25,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import net.gunivers.gdk.Main;
 
 public class BaseController extends Controller
 {
@@ -85,7 +86,7 @@ public class BaseController extends Controller
 		System.out.println("[DEBUG] Menu File::click(save)");
 		
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File
-				( Main.class.getResource(Main.PATH.OTHERS + "launcher.save").toURI() ))))
+				( Main.class.getResource(PATH.OTHERS + "launcher.save").toURI() ))))
 		{
 			oos.writeObject(Main.plugins);
 			
@@ -110,11 +111,10 @@ public class BaseController extends Controller
 	{
 		final Stage stage = new Stage();
 		
-		PluginViewController controller = Util.loadFXML(Main.class.getResource(Main.PATH.FXML+"PluginView.fxml"), (p) ->
+		PluginViewController controller = Util.loadFXML(Main.class.getResource(PATH.FXML+"PluginView.fxml"), (p) ->
 			stage.setScene(new Scene(p)) );
 		
-		if (controller != null)
-			controller.setPlugin(plugin);
+		if (controller != null) controller.setPlugin(plugin);
 		
 		stage.sizeToScene();
 		stage.setResizable(false);

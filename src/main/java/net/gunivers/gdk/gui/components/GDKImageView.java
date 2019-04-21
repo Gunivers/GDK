@@ -1,13 +1,13 @@
-package fr.gunivers.gdk.gui.components;
+package net.gunivers.gdk.gui.components;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import fr.gunivers.gdk.Main;
-import fr.gunivers.gdk.Main.PATH;
-import fr.gunivers.gdk.gui.model.GDKPlugin;
-import fr.gunivers.gdk.gui.util.Util;
+import net.gunivers.gdk.gui.model.GDKPlugin;
+import net.gunivers.gdk.Main;
+import net.gunivers.gdk.Util;
+import static net.gunivers.gdk.Util.PATH;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -21,24 +21,26 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
-public class GDKImageView <T extends GDKPlugin> extends AnchorPane
+public class GDKImageView <G extends GDKPlugin> extends AnchorPane
 {
 	public final static String DEFAULT_TITLE = "<Title>";
-	public final static Image DEFAULT_ICON = new Image(PATH.IMAGE+"no_icon.png");
+	public final static Image DEFAULT_ICON = new Image(PATH.IMAGE + "no_icon.png");
 
 	public final static HashMap<GDKPlugin, GDKImageView<? extends GDKPlugin>> instances = new HashMap<>();
 	
 	@FXML private Label label;
 	@FXML private ImageView image;
 	
-	private final SimpleStringProperty title = new SimpleStringProperty();
-	private final SimpleObjectProperty<Image> icon = new SimpleObjectProperty<>();
-	private final SimpleObjectProperty<T> plugin = new SimpleObjectProperty<T>();
+	private final SimpleStringProperty title = new SimpleStringProperty(DEFAULT_TITLE);
+	private final SimpleObjectProperty<Image> icon = new SimpleObjectProperty<>(DEFAULT_ICON);
+	private final SimpleObjectProperty<G> plugin = new SimpleObjectProperty<G>();
 	
-	private Callback<T, Entry<String,Image>> factory = t -> Util.newEntry(t.getName(), DEFAULT_ICON);
+	private Callback<G, Entry<String,Image>> factory = t -> Util.newEntry(t.getName().trim(), DEFAULT_ICON);
 	
 	{
-		plugin.addListener((obs, old, value) -> { Entry<String,Image> back = factory.call(value);
+		plugin.addListener((obs, old, value) ->
+		{
+			Entry<String,Image> back = factory.call(value);
 			title.set(back.getKey() == null || back.getKey().isEmpty() ? DEFAULT_TITLE : back.getKey());
 			icon.set(back.getValue() == null || back.getValue().isError() ? DEFAULT_ICON : back.getValue());
 			
@@ -62,34 +64,34 @@ public class GDKImageView <T extends GDKPlugin> extends AnchorPane
 		label.textProperty().bind(title);
 		image.imageProperty().bind(icon);
 	}
-	public GDKImageView(T plugin)
+	public GDKImageView(G plugin)
 	{
 		this();
 		this.plugin.set(plugin);
 	}
-	public GDKImageView(GDKImageView<T> base)
+	public GDKImageView(GDKImageView<G> base)
 	{
 		this(base.plugin.get());
 		this.factory = base.factory;
 	}
-	public GDKImageView(GDKImageView<T> base, T plugin)
+	public GDKImageView(GDKImageView<G> base, G plugin)
 	{
 		this(base);
 		this.plugin.set(plugin);
 	}
 	
-	public void setViewFactory(Callback<T, Entry<String,Image>> factory) { this.factory = factory; }
-	public Callback<T, Entry<String, Image>> getViewFactory() { return factory; };
+	public void setViewFactory(Callback<G, Entry<String,Image>> factory) { this.factory = factory; }
+	public Callback<G, Entry<String, Image>> getViewFactory() { return factory; };
 	
 	public StringProperty titleProperty() { return title; }
 	public ObjectProperty<Image> iconProperty() { return icon; }
-	public ObjectProperty<T> pluginProperty() { return plugin; }
+	public ObjectProperty<G> pluginProperty() { return plugin; }
 	
 	public String getTitle() { return title.get(); }
 	public Image getIcon() { return icon.get(); }
-	public T getPlugin() { return plugin.get(); }
+	public G getPlugin() { return plugin.get(); }
 	
 	public void setTitle(String title) { this.title.set(title); }
 	public void setIcon(Image icon) { this.icon.set(icon); }
-	public void setPlugin(T plugin) { this.plugin.set(plugin); }
+	public void setPlugin(G plugin) { this.plugin.set(plugin); }
 }

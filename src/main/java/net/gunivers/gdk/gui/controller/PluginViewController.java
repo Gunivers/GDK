@@ -1,13 +1,12 @@
-package fr.gunivers.gdk.gui.controller;
+package net.gunivers.gdk.gui.controller;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import fr.gunivers.gdk.Main;
-import fr.gunivers.gdk.gui.components.GDKImageView;
-import fr.gunivers.gdk.gui.model.GDKPlugin;
-import fr.gunivers.gdk.gui.util.Controller;
-import fr.gunivers.gdk.gui.util.Util;
+import net.gunivers.gdk.gui.Controller;
+import net.gunivers.gdk.gui.components.GDKImageView;
+import net.gunivers.gdk.gui.model.GDKPlugin;
+import net.gunivers.gdk.Util;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -18,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
+import net.gunivers.gdk.Main;
 
 public class PluginViewController extends Controller
 {	

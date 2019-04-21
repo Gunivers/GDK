@@ -1,7 +1,7 @@
-package fr.gunivers.gdk.gui.util;
+package net.gunivers.gdk.gui;
 
-import fr.gunivers.gdk.Main;
 import javafx.fxml.FXML;
+import net.gunivers.gdk.Main;
 
 public abstract class Controller
 {
